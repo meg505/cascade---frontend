@@ -1,10 +1,10 @@
+import { useState } from "react";
+import SearchBar, { Song } from "@/components/searchbar";
 import Sidebar from "@/components/Sidebar";
 import TopBar from "@/components/TopBar";
 import HeroSection from "@/components/HeroSection";
 import FeaturedSection from "@/components/FeaturedSection";
 import MusicPlayer from "@/components/MusicPlayer";
-import SearchBar, { Song } from "@/components/searchbar";
-import { useState } from "react";
 
 const Index = () => {
   const [results, setResults] = useState<Song[]>([]);
@@ -12,36 +12,35 @@ const Index = () => {
   return (
     <div className="flex min-h-screen bg-background">
       <Sidebar />
-
       <div className="flex-1 ml-64">
         <TopBar />
-
-        <main className="pt-20 pb-24 min-h-screen px-6">
+        <main className="pt-20 pb-24 min-h-screen">
           <HeroSection />
-
-          {/* Search Bar */}
-          <div className="my-8">
-            <SearchBar onResults={setResults} />
-          </div>
-
-          {/* Display Search Results */}
-          {results.length > 0 && (
-            <div className="mb-8">
-              <h2 className="text-xl font-semibold mb-4">Search Results</h2>
-              <ul className="space-y-2">
-                {results.map((song, index) => (
-                  <li key={index} className="p-2 bg-white rounded shadow">
-                    {song.name} by {song.artist}
+          <SearchBar onResults={setResults} />
+          
+          {/* Display search results */}
+          <div className="mt-6">
+            {results.length === 0 ? (
+              <p>No results yet</p>
+            ) : (
+              <ul>
+                {results.map((song, idx) => (
+                  <li key={idx} className="mb-4">
+                    <img src={song.image} alt={song.name} className="w-16 h-16 inline-block mr-4" />
+                    <div className="inline-block align-middle">
+                      <p className="font-bold">{song.name}</p>
+                      <p>{song.artist} - {song.album}</p>
+                      {song.preview && <audio controls src={song.preview}></audio>}
+                    </div>
                   </li>
                 ))}
               </ul>
-            </div>
-          )}
+            )}
+          </div>
 
           <FeaturedSection />
         </main>
       </div>
-
       <MusicPlayer />
     </div>
   );
